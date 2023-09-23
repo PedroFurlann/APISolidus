@@ -1,14 +1,12 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import registerRoute from './routes/register'
-import authenticateRoute from './routes/authenticate'
+import authRoutes from './routes/authRoutes'
 
 const app = Fastify()
 
 
 app.register(cors)
-app.register(registerRoute)
-app.register(authenticateRoute )
+app.register(authRoutes)
 
 app.listen({
   port: 3333,
