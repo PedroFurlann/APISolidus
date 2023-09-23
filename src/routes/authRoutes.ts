@@ -1,20 +1,20 @@
 import { prisma } from "../lib/prisma";
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import bcrypt from 'bcrypt';
-import { z } from 'zod';
+import * as yup from 'yup'
 import { generateToken } from '../providers/generateToken';
 
 export default async function authRoutes(app: FastifyInstance) {
 
     app.post('/register', async (request: FastifyRequest, reply: FastifyReply) => {
   
-      const registerSchema = z.object({
-        name: z.string(),
-        email: z.string().email(),
-        password: z.string().min(6),
+      const registerSchema = yup.object({
+        name: yup.string().trim().required("O nome é obrigatório."),
+        email: yup.string().trim().email("Digite um email válido").required("o email é obrigatório."),
+        password: yup.string().trim().min(6, "A senha deve ter no mínimo 6 caracteres").required("a senha é obrigatória."),
       });
   
-      const { name, email, password } = registerSchema.parse(request.body);
+      const { name, email, password } = await registerSchema.validate(request.body);
   
       try {
         const existingUser = await prisma.user.findFirst({    
@@ -24,7 +24,7 @@ export default async function authRoutes(app: FastifyInstance) {
         });
   
         if (existingUser) {
-          return reply.status(400).send({ error: 'Email already in use' });
+          return reply.status(400).send({ error: 'Email já está em uso.' });
         }
   
         // Hash da senha antes de salvar no banco de dados
@@ -40,21 +40,21 @@ export default async function authRoutes(app: FastifyInstance) {
         });
   
         // Retorna o novo usuário
-        return reply.status(200).send({ message: "User created." });
+        return reply.status(200).send({ message: "Usuário criado com sucesso" });
       } catch (error) {
-        console.error('Error creating user:', error);
-        return reply.status(500).send({ error: 'Error creating user' });
+        console.error('Erro ao criar usuário:', error);
+        return reply.status(500).send({ error: 'Erro ao criar usuário' });
       }
     });
 
     app.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
-      const loginSchema = z.object({
-        email: z.string().email(),
-        password: z.string().min(6).nullable(),
+      const loginSchema = yup.object({
+        email: yup.string().trim().email("Digite um email válido").required("O email é obrigatório."),
+        password: yup.string().trim().min(6, "A senha deve ter no mínimo 6 caracteres").required("A senha é obrigatória."),
       });
 
       try {
-        const { email, password } = loginSchema.parse(request.body);
+        const { email, password } =  await loginSchema.validate(request.body);
   
         const user = await prisma.user.findFirst({
           where: {
@@ -63,17 +63,17 @@ export default async function authRoutes(app: FastifyInstance) {
         });
   
         if (!user) {
-          return reply.status(401).send({ error: 'Invalid email or password' });
+          return reply.status(401).send({ error: 'Email ou senha inválidos' });
         }
   
         if (password === null || typeof password !== 'string') {
-          return reply.status(401).send({ error: 'Password cannot be null' });
+          return reply.status(401).send({ error: 'A senha não pode ser nula' });
         }
   
         const passwordMatch = await bcrypt.compare(password, user.password || '');
   
         if (!passwordMatch || !user) {
-          return reply.status(401).send({ error: 'Invalid email or password' });
+          return reply.status(401).send({ error: 'Email ou senha inválidos' });
         }
   
         const userWithoutPassword = {
@@ -88,8 +88,8 @@ export default async function authRoutes(app: FastifyInstance) {
   
         return reply.send({ token, user: userWithoutPassword });
       } catch (error) {
-        console.error('Error logging in:', error);
-        return reply.status(500).send({ error: 'Error logging in' });
+        console.error('Erro ao realizar login:', error);
+        return reply.status(500).send({ error: 'Erro ao realizar login' });
       }
     });
 }

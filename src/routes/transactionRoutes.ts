@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import verifyTokenMiddleware from '../middlewares/verifyToken';
 import { prisma } from '../lib/prisma';
-import { z } from 'zod';
+import * as yup from 'yup'
 
 interface TransactionParams {
   id: string;
@@ -12,21 +12,19 @@ enum TransactionType {
   LOSS = 'LOSS',
 }
 
-
-
 export default async function transactionRoutes(app: FastifyInstance) {
   
   app.addHook('onRequest', verifyTokenMiddleware);
 
   app.post('/transactions', async (request: FastifyRequest, reply: FastifyReply) => {
-    const createTransactionSchema = z.object({
-      title: z.string().nonempty(),
-      type: z.enum([TransactionType.PROFIT, TransactionType.LOSS]), 
-      category: z.string(),
-      amount: z.number(),
+    const createTransactionSchema = yup.object({
+      title: yup.string().trim().required("O título é obrigatório."),
+      type: yup.string().trim().required("O tipo é obrigatório."), 
+      category: yup.string().trim().required("A categoria é obrigatória."),
+      amount: yup.number().required("O valor é obrigatŕio."),
     });
 
-    const { title, type, category, amount } = createTransactionSchema.parse(request.body);
+    const { title, type, category, amount } = await createTransactionSchema.validate(request.body);
     const userId = (request as any).user.id;
     const adjustedAmount = type === TransactionType.PROFIT ? amount : -amount;
 
