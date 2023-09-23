@@ -27,7 +27,7 @@ export default async function transactionRoutes(app: FastifyInstance) {
     });
 
     const { title, type, category, amount } = createTransactionSchema.parse(request.body);
-    const userId = (request as any).user.id; 
+    const userId = (request as any).user.id;
     const adjustedAmount = type === TransactionType.PROFIT ? amount : -amount;
 
 

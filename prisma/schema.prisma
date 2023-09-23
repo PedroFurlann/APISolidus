@@ -30,7 +30,7 @@ model Transactions {
   title    String
   type     String
   category String
-  amount   BigInt
+  amount   Int
   User     User   @relation(fields: [userId], references: [id])
   userId   Int
 }
