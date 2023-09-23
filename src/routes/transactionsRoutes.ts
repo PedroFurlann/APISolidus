@@ -12,7 +12,7 @@ enum TransactionType {
   LOSS = 'LOSS',
 }
 
-export default async function transactionRoutes(app: FastifyInstance) {
+export default async function transactionsRoutes(app: FastifyInstance) {
   
   app.addHook('onRequest', verifyTokenMiddleware);
 
@@ -28,6 +28,7 @@ export default async function transactionRoutes(app: FastifyInstance) {
     const userId = (request as any).user.id;
     const adjustedAmount = type === TransactionType.PROFIT ? amount : -amount;
 
+    const createdAt = new Date();
 
     try {
       const newTransaction = await prisma.transactions.create({
@@ -36,6 +37,7 @@ export default async function transactionRoutes(app: FastifyInstance) {
           type,
           category,
           amount: adjustedAmount,
+          createdAt,
           userId,
         },
       });

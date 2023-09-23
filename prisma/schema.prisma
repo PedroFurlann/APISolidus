@@ -26,11 +26,12 @@ model AccessToken {
 }
 
 model Transactions {
-  id       Int    @id @default(autoincrement())
-  title    String
-  type     String
-  category String
-  amount   Int
-  User     User   @relation(fields: [userId], references: [id])
-  userId   Int
+  id        Int      @id @default(autoincrement())
+  title     String
+  type      String
+  category  String
+  amount    Int
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
