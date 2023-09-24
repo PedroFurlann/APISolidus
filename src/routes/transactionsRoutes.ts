@@ -20,7 +20,7 @@ export default async function transactionsRoutes(app: FastifyInstance) {
     const createTransactionSchema = yup.object({
       title: yup.string().trim().required("O título é obrigatório."),
       type: yup.string().trim().required("O tipo é obrigatório."), 
-      category: yup.string().trim().required("A categoria é obrigatória."),
+      category: yup.string().trim().nullable(),
       amount: yup.number().required("O valor é obrigatŕio."),
     });
 
@@ -35,7 +35,7 @@ export default async function transactionsRoutes(app: FastifyInstance) {
         data: {
           title,
           type,
-          category,
+          category: type === TransactionType.PROFIT ? null : category,
           amount: adjustedAmount,
           createdAt,
           userId,
