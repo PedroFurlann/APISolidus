@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import jwt from 'jsonwebtoken';
 
-export default async function verifyTokenMiddleware(request: FastifyRequest, reply: FastifyReply) {
+export default async function verifyToken(request: FastifyRequest, reply: FastifyReply) {
   const token = request.headers.authorization;
 
   if (!token || !token.startsWith('Bearer ')) {

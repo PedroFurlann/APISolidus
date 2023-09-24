@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import verifyTokenMiddleware from '../middlewares/verifyToken';
+import verifyToken from '../middlewares/verifyToken';
 import { prisma } from '../lib/prisma';
 import * as yup from 'yup'
 
@@ -14,7 +14,7 @@ enum TransactionType {
 
 export default async function transactionsRoutes(app: FastifyInstance) {
   
-  app.addHook('onRequest', verifyTokenMiddleware);
+  app.addHook('onRequest', verifyToken);
 
   app.post('/transactions', async (request: FastifyRequest, reply: FastifyReply) => {
     const createTransactionSchema = yup.object({
@@ -42,10 +42,10 @@ export default async function transactionsRoutes(app: FastifyInstance) {
         },
       });
 
-      return reply.status(200).send({ transaction: newTransaction });
+      return reply.status(200).send({ message: "Transação criada com sucesso!" });
     } catch (error) {
       console.error('Erro ao criar transação:', error);
-      return reply.status(500).send({ error: 'Erro ao criar transação' });
+      return reply.status(500).send({ error: 'Erro ao criar transação.' });
     }
   });
 
@@ -62,7 +62,7 @@ export default async function transactionsRoutes(app: FastifyInstance) {
       return reply.status(200).send({ transactions });
     } catch (error) {
       console.error('Erro ao buscar transações:', error);
-      return reply.status(500).send({ error: 'Erro ao buscar transações' });
+      return reply.status(500).send({ error: 'Erro ao buscar transações.' });
     }
   });
 
@@ -80,13 +80,13 @@ export default async function transactionsRoutes(app: FastifyInstance) {
       });
 
       if (!transaction) {
-        return reply.status(404).send({ error: 'Transação não encontrada' });
+        return reply.status(404).send({ error: 'Transação não encontrada.' });
       }
 
       return reply.status(200).send({ transaction });
     } catch (error) {
       console.error('Erro ao buscar transação:', error);
-      return reply.status(500).send({ error: 'Erro ao buscar transação' });
+      return reply.status(500).send({ error: 'Erro ao buscar transação.' });
     }
   });
 
@@ -103,7 +103,7 @@ export default async function transactionsRoutes(app: FastifyInstance) {
       });
 
       if (!transaction) {
-        return reply.status(404).send({ error: 'Transação não encontrada' });
+        return reply.status(404).send({ error: 'Transação não encontrada.' });
       }
 
       await prisma.transactions.delete({
@@ -112,10 +112,10 @@ export default async function transactionsRoutes(app: FastifyInstance) {
         },
       });
 
-      return reply.status(200).send({ message: 'Transação deletada com sucesso' });
+      return reply.status(200).send({ message: 'Transação deletada com sucesso!' });
     } catch (error) {
       console.error('Erro ao deletar transação:', error);
-      return reply.status(500).send({ error: 'Erro ao deletar transação' });
+      return reply.status(500).send({ error: 'Erro ao deletar transação.' });
     }
   });
 }

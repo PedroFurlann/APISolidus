@@ -21,17 +21,17 @@ export default async function sessionRoutes(app: FastifyInstance) {
       });
 
       if (!user) {
-        return reply.status(401).send({ error: 'Email ou senha inválidos' });
+        return reply.status(401).send({ error: 'Email ou senha inválidos.' });
       }
 
       if (password === null || typeof password !== 'string') {
-        return reply.status(401).send({ error: 'A senha não pode ser nula' });
+        return reply.status(401).send({ error: 'A senha não pode ser nula.' });
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password || '');
 
       if (!passwordMatch || !user) {
-        return reply.status(401).send({ error: 'Email ou senha inválidos' });
+        return reply.status(401).send({ error: 'Email ou senha inválidos.' });
       }
 
       const userWithoutPassword = {
@@ -47,7 +47,7 @@ export default async function sessionRoutes(app: FastifyInstance) {
       return reply.send({ token, user: userWithoutPassword });
     } catch (error) {
       console.error('Erro ao realizar login:', error);
-      return reply.status(500).send({ error: 'Erro ao realizar login' });
+      return reply.status(500).send({ error: 'Erro ao realizar login.' });
     }
   });
 }
