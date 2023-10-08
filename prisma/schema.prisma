@@ -14,15 +14,8 @@ model User {
   password     String?
   googleId     String?
   facebookId   String?
-  AccessToken  AccessToken[]
+  avatarUrl    String?
   transactions Transactions[]
-}
-
-model AccessToken {
-  id     Int    @id @default(autoincrement())
-  token  String
-  userId Int
-  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Transactions {

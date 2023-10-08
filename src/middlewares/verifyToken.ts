@@ -14,6 +14,6 @@ export default async function verifyToken(request: FastifyRequest, reply: Fastif
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY || "");
     (request as any).user = decoded
   } catch (error) {
-    return reply.status(401).send({ message: 'Token inválido. Faça login novamente.' });
+    return reply.status(401).send({ message: 'Sua sessão expirou. Por favor, faça login novamente.' });
   }
 }
