@@ -70,7 +70,7 @@ export default async function sessionRoutes(app: FastifyInstance) {
       return reply.status(404).send({ message: 'E-mail não encontrado.' });
     }
   
-    const resetLink = `http://localhost:3000/recoveryPassword?email=${email}`;
+    const resetLink = `http://localhost:3000/recoveryPassword?asdfghiieiiasmdiwmdwamdiwadwamkd=${Buffer.from(email).toString("base64")}`;
   
     await sendPasswordResetEmail(email, resetLink);
   
