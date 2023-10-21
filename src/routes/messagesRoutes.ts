@@ -49,4 +49,19 @@ export default async function messagesRoutes(app: FastifyInstance) {
       return reply.status(500).send({ error: 'Erro ao buscar mensagens.' });
     }
   });
+
+  app.delete('/messages', async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = (request as any).user.id; 
+
+    try {
+      await prisma.$queryRaw`
+        DELETE FROM Messages m where m.userId = ${userId}
+      `;
+
+      return reply.status(200).send({ message: 'Histórico de mensagens deletado com sucesso!' });
+    } catch (error) {
+      console.error('Erro ao deletar histórico de mensagens.', error);
+      return reply.status(500).send({ message: 'Erro ao deletar histórico de mensagens.' });
+    }
+  });
 }
