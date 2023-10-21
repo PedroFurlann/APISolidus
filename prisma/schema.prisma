@@ -16,6 +16,7 @@ model User {
   facebookId   String?
   avatarUrl    String?
   transactions Transactions[]
+  Messages     Messages[]
 }
 
 model Transactions {
@@ -27,4 +28,13 @@ model Transactions {
   createdAt DateTime @default(now())
   User      User     @relation(fields: [userId], references: [id])
   userId    Int
+}
+
+model Messages {
+  id            Int      @id @default(autoincrement())
+  content       String
+  isUserMessage Boolean
+  createdAt     DateTime @default(now())
+  User          User     @relation(fields: [userId], references: [id])
+  userId        Int
 }
