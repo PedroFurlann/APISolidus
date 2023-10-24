@@ -28,8 +28,8 @@ export default async function messagesRoutes(app: FastifyInstance) {
 
       return reply.status(200).send({ message: "Mensagem adicionada com sucesso!" });
     } catch (error) {
-      console.error('Erro ao criar transação:', error);
-      return reply.status(500).send({ message: 'Erro ao adicionar mensagem transação.' });
+      console.error('Erro ao adicionar mensagem:', error);
+      return reply.status(500).send({ message: 'Erro ao adicionar mensagem.' });
     }
   });
 

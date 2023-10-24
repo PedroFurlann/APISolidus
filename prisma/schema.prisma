@@ -32,7 +32,7 @@ model Transactions {
 
 model Messages {
   id            Int      @id @default(autoincrement())
-  content       String
+  content       String   @db.LongText
   isUserMessage Boolean
   createdAt     DateTime @default(now())
   User          User     @relation(fields: [userId], references: [id])
