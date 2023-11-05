@@ -19,7 +19,6 @@ export async function sendPasswordResetEmail(email: string, resetLink: string) {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log('E-mail de recuperação de senha enviado com sucesso!');
   } catch (error) {
     console.error('Erro ao enviar e-mail:', error);
   }

@@ -36,7 +36,7 @@ export default async function usersRoutes(app: FastifyInstance) {
       });
 
       if (existingUser) {
-        return reply.status(400).send({ error: "Email já está em uso." });
+        return reply.status(400).send({ message: "Email já está em uso." });
       }
 
       // Hash da senha antes de salvar no banco de dados
@@ -55,7 +55,7 @@ export default async function usersRoutes(app: FastifyInstance) {
       return reply.status(200).send({ message: "Usuário criado com sucesso." });
     } catch (error) {
       console.error("Erro ao criar usuário:", error);
-      return reply.status(500).send({ error: "Erro ao criar usuário." });
+      return reply.status(500).send({ message: "Erro ao criar usuário." });
     }
   });
 
@@ -92,7 +92,7 @@ export default async function usersRoutes(app: FastifyInstance) {
         console.error("Erro ao atualizar perfil do usuário:", error);
         return reply
           .status(500)
-          .send({ error: "Erro ao atualizar perfil do usuário." });
+          .send({ message: "Erro ao atualizar perfil do usuário." });
       }
     }
   );

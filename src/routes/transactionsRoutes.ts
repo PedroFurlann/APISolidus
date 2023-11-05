@@ -62,7 +62,7 @@ export default async function transactionsRoutes(app: FastifyInstance) {
       return reply.status(200).send({ transactions });
     } catch (error) {
       console.error('Erro ao buscar transações:', error);
-      return reply.status(500).send({ error: 'Erro ao buscar transações.' });
+      return reply.status(500).send({ message: 'Erro ao buscar transações.' });
     }
   });
 

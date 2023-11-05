@@ -46,7 +46,7 @@ export default async function messagesRoutes(app: FastifyInstance) {
       return reply.status(200).send({ messages });
     } catch (error) {
       console.error('Erro ao buscar mensagens.', error);
-      return reply.status(500).send({ error: 'Erro ao buscar mensagens.' });
+      return reply.status(500).send({ message: 'Erro ao buscar mensagens.' });
     }
   });
 
