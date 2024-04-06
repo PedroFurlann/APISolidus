@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -35,7 +35,7 @@ model Transactions {
 
 model Messages {
   id            Int      @id @default(autoincrement())
-  content       String   @db.LongText
+  content       String
   isUserMessage Boolean
   createdAt     DateTime @default(now())
   User          User     @relation(fields: [userId], references: [id])
