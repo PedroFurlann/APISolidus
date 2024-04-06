@@ -54,9 +54,11 @@ export default async function messagesRoutes(app: FastifyInstance) {
     const userId = (request as any).user.id; 
 
     try {
-      await prisma.$queryRaw`
-        DELETE FROM Messages m where m.userId = ${userId}
-      `;
+      await prisma.messages.deleteMany({
+        where: {
+          userId
+        }
+      })
 
       return reply.status(200).send({ message: 'Histórico de mensagens deletado com sucesso!' });
     } catch (error) {
